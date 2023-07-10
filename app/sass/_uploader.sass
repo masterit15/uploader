@@ -1,0 +1,122 @@
+.uploader
+  width: 100%
+  max-width: 620px
+  height: auto
+  min-height: 200px
+  &.highlight
+    background-color: #eee
+  &_input
+    // display: none
+    visibility: hidden
+  &_text
+    position: relative
+    border: 2px dashed #eee
+    display: flex
+    flex-direction: column
+    justify-content: center
+    align-items: center
+    border-radius: 10px
+    cursor: pointer
+    & span
+      opacity: 0.6
+  &_list
+    padding: 0
+    margin: 0
+    width: 100%
+    list-style: none
+    display: flex
+    justify-content: flex-start
+    flex-direction: column
+    &_item
+      display: flex
+      justify-content: space-between
+      align-items: center
+      height: 60px
+      border-top: 1px solid #eee 
+      &:first-child
+        border: none
+      &_icon,&_name,&_size
+        display: flex
+        align-items: center
+      &_icon
+        flex-basis: 15%
+        justify-content: center
+        svg
+          width: 25px
+          height: 25px
+      &_name
+        position: relative
+        flex-basis: 65%
+        margin-left: auto
+        justify-content: flex-start
+        overflow: hidden
+        white-space: nowrap
+        text-overflow: ellipsis
+        &.active
+          & .uploader_list_item_name_check
+            visibility: visible
+        &_check
+          position: absolute
+          right: 0
+          top: 0
+          bottom: 0
+          margin: auto
+          width: 22px
+          height: 22px
+          cursor: pointer
+          fill: #52853a
+          visibility: hidden
+        & input[name="file_name"]
+          border: none
+          width: 100%
+          background-color: transparent
+          &[disabled]
+            opacity: 0.7
+            background-color: transparent
+      &_size
+        flex-basis: 15%
+        justify-content: flex-end
+        font-size: 13px
+      &_action
+        cursor: pointer
+        // position: relative
+        flex-basis: 5%
+        display: flex
+        justify-content: center
+        align-items: center
+        width: 20px
+        height: 100%
+        &:hover
+          background-color: #eee
+        &_list
+          visibility: hidden
+          opacity: 0
+          position: absolute
+          width: 120px
+          right: 0
+          top: 100%
+          list-style: none
+          padding: 0
+          margin: 0
+          background-color: #fff
+          border-radius: 3px
+          box-shadow: 0 0 12px rgba(0, 0, 0, 0.3)
+          z-index: 999
+          transition: all 0.3s ease
+          &.active
+            visibility: visible
+            opacity: 1
+            transition: all 0.3s ease
+          &_item
+            cursor: pointer
+            display: flex
+            justify-content: flex-start
+            align-items: center
+            gap: 15px
+            padding: 5px 8px
+            &:hover
+              background-color: #eee
+      img
+        width: 140px
+        height: auto
+        object-fit: cover

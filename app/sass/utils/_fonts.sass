@@ -1,0 +1,19 @@
+// FONTS LOAD SECTION
+@mixin font($fname, $fstyle, $fweight, $furl)
+	@font-face
+		font-family: $fname
+		font-style: $fstyle
+		font-weight: $fweight
+		src: url($furl) //format('ttf')
+
+@include font('Roboto-Regular', normal, 400, '../fonts/Roboto/Roboto-Regular.ttf')
+@include font('Roboto-Italic', italic, 400, '../fonts/Roboto/Roboto-Italic.ttf')
+@include font('Roboto-Bold', normal, 700, '../fonts/Roboto/Roboto-Bold.ttf')
+@include font('Roboto-Black', normal, 900, '../fonts/Roboto/Roboto-Black.ttf')
+@include font('Neon', normal, 900, '../fonts/Neon/NeonTubes2.otf')
+
+$RobotoRegular: 'Roboto-Regular', sans-serif
+$RobotoItalic: 'Roboto-Italic', sans-serif
+$RobotoBold: 'Roboto-Bold', sans-serif
+$RobotoBlack: 'Roboto-Black', sans-serif
+$Neon: 'Neon', sans-serif
