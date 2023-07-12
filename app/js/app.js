@@ -178,7 +178,6 @@ class Uploader {
   }
 
   _onPropertyChanged(propName, val) {
-      console.log(propName, val);
       this.uploaderMessage.innerHTML = val
   }
   formatBytes = (bytes, decimals = 2)=> {
@@ -288,6 +287,7 @@ class Uploader {
     }
     let index = this.files.findIndex(f=> f.name == file.name || f.size == file.size)
     if(this.validFileCount()) return
+
     if(index == -1){
       let id = Date.now()
       this.files.push({id,file})
@@ -370,32 +370,34 @@ class Uploader {
   view = (file, id) => {
     let uploaderList = this.uploader.querySelector('.uploader_list')
     let ext = file.name.split('.').pop()
+    let name = file.name.split(`.${ext}`)[0]
     let icon = this.getIcon(ext)
-    let index = this.files.findIndex(f=>f.name == file.name || f.size == file.size)
     let mediaExtArr = ['jpeg', 'jpg', 'gif', 'png']
+    console.log(name);
+    const that = this 
     if(this.showImgPreview){
       if(mediaExtArr.includes(ext.toLowerCase())){
         let reader = new FileReader();
-        const that = this 
-        reader.addEventListener("load", function (event) {
+ 
+        reader.addEventListener("load", (event)=> {
           uploaderList.innerHTML += `<li data-id="${id}" class="uploader_list_item">
           <span class="uploader_list_item_icon"><img src="${event.target.result}"/></span>
-                                      <span class="uploader_list_item_name">${file.name}</span>
-                                      <span class="uploader_list_item_size">${that.formatBytes(file.size)}</span>
+                                      <span class="uploader_list_item_name">${name}</span>
+                                      <span class="uploader_list_item_size">${this.formatBytes(file.size)}</span>
                                     </li>`
         })
         reader.readAsDataURL(file);
       }else{
         uploaderList.innerHTML += `<li data-id="${id}" class="uploader_list_item">
                                     <span class="uploader_list_item_icon">${icon}</span>
-                                    <span class="uploader_list_item_name">${file.name}</span>
+                                    <span class="uploader_list_item_name">${name}</span>
                                     <span class="uploader_list_item_size">${this.formatBytes(file.size)}</span>
                                  </li>`
       }
     }else{
       uploaderList.innerHTML += `<li data-id="${id}" class="uploader_list_item">
                                     <span class="uploader_list_item_icon">${icon}</span>
-                                    <span class="uploader_list_item_name"><input type="text" name="file_name" value="${file.name}" disabled/><svg class="uploader_list_item_name_check" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill: ${this.fileIconColor}}</style><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg></span>
+                                    <span class="uploader_list_item_name"><input type="text" name="file_name" value="${name}" disabled/><svg class="uploader_list_item_name_check" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill: ${this.fileIconColor}}</style><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg></span>
                                     <span class="uploader_list_item_size">${this.formatBytes(file.size)}</span>
                                     <span class="uploader_list_item_action">
                                       <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 128 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill: ${this.fileIconColor}}</style><path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z"/></svg>
@@ -406,26 +408,27 @@ class Uploader {
                                     </span>
                                  </li>`
     }
-    // setTimeout(() => {
       let items = uploaderList.querySelectorAll('.uploader_list_item')
+
       items.forEach(item=>{
-        item.querySelector('.uploader_list_item_action').addEventListener('click', (e)=>{
-          let actionList = item.querySelector('.uploader_list_item_action_list')
-          this.positionMenu(e, actionList)
+        
+        item.querySelector('.uploader_list_item_action').addEventListener('click', function (){
+          console.log('click');
+            let actionList = item.querySelector('.uploader_list_item_action_list')
+            // this.positionMenu(e, actionList)
             if(!actionList?.classList.contains('active')){
               document.querySelectorAll('.uploader_list_item_action_list').forEach(el=>el.classList.remove('active'))
               actionList?.classList.add('active')
               let deleteItem = actionList.querySelector('.uploader_list_item_action_list_item.delete')
               let editItem = actionList.querySelector('.uploader_list_item_action_list_item.edit')
               editItem.addEventListener('click', ()=>{
+                actionList.classList.remove('active')
                 let item = editItem.closest('.uploader_list_item')
                 let name = item.querySelector('.uploader_list_item_name')
                 let input = name.querySelector('input')
                 let check = name.querySelector('.uploader_list_item_name_check')
-                let fileExt = input.value.split('.').pop()
                 let oldValue = input.value
-                let index = this.files.findIndex(f=>f.id == item.dataset.id)
-
+                let index = that.files.findIndex(f=>f.id == item.dataset.id)
                 input.disabled = false
                 input.addEventListener('input', ()=>{
                   let newValue = input.value
@@ -433,32 +436,39 @@ class Uploader {
                     name.classList.add('active')
                   }else{
                     name.classList.remove('active')
-                  }]
+                  }
                 })
                 check.addEventListener('click', ()=>{
-                  let newName = `${input.value}.${fileExt}`
-                  this.files[index].file.name = newName
+                  let newName = input.value
+                  Object.defineProperty(that.files[index].file, 'name', {
+                    writable: true,
+                    value: `${newName}.${ext}`
+                  });
                   input.value = newName
                   input.disabled = true
                   name.classList.remove('active')
-                  console.log(this.files);
+                  console.log(that.files[index].file);
+                  check.removeEventListener('click', (e)=>{})
                 })
+                editItem.removeEventListener('click', (e)=>{})
               })
               deleteItem.addEventListener('click', ()=>{
                 let removeItem = deleteItem.closest('.uploader_list_item')
-                this.files = this.files.filter(f=>f.id != removeItem.dataset.id)
+                that.files = that.files.filter(f=>f.id != removeItem.dataset.id)
                 removeItem.remove()
-                this.limitDisplay()
-                console.log(this.files)
+                that.limitDisplay()
+                actionList.classList.remove('active')
+                console.log(that.files)
+                deleteItem.removeEventListener('click', (e)=>{})
               })
             }else{
               actionList?.classList.remove('active')
             }
-          
+            item.querySelector('.uploader_list_item_action').removeEventListener('click', (e)=>{})
         })
 
       })
-    // }, 0);
+
   };
   getPosition = (e)=> {
     let posx = 0;
